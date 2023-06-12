@@ -28,7 +28,7 @@ public class SimulationDriver {
         System.out.print("\nQuestion " + i + "\n\n");
         int questionType = rand.nextInt(2);
     
-        if(questionType == 0 || questionType == 1) { 
+        if(questionType == 0) { 
             SCQ = true;
         } else {
             MCQ = true;
@@ -36,24 +36,35 @@ public class SimulationDriver {
 
         if(SCQ == true) {
             int j = 0;
-            char randAnswer;
+            String randAnswer;
             String possibleAnswers = "ABCD";
+            String possibleAnswersTF = "TF";
             int questionNumber = rand.nextInt(6) + 1;
+            System.out.println(questionNumber);
             question.createSCQ(questionNumber);
+            //Lets know the voting service know if its a A-D answer question or True/False answer question.
             vote.ConfigureSCQ(questionNumber);
+            if (questionNumber == 5 || questionNumber == 6)
+            {
+                for (j = 0; j < numStudents; j++) {
+                    Student testStudent = new Student();
+                    randAnswer = String.valueOf(possibleAnswersTF.charAt(rand.nextInt(possibleAnswersTF.length())));
+                    testStudent.setStudentAnswer(randAnswer);
+                    vote.submitTF(testStudent);
+                }   
 
-            
-                System.out.println("Number of students: " + numStudents);
+            }
+           else {
                 for (j = 0; j < numStudents; j++) {
                     Student testStudent = new Student();
 
-                    randAnswer = possibleAnswers.charAt(rand.nextInt(possibleAnswers.length()));
+                    randAnswer = String.valueOf(possibleAnswers.charAt(rand.nextInt(possibleAnswers.length())));
                     testStudent.setStudentAnswer(randAnswer);
                     vote.submitSCQ(testStudent);
                 }   
            
            
-            
+           }
     
         vote.results(question);
        
@@ -62,23 +73,32 @@ public class SimulationDriver {
     }
    // Start of the Multiple choice question simulation.
         if(MCQ == true) {
-        int j = 0;
+        
         int numChoicePicked;
         int questionNumber = rand.nextInt(5) + 1;
-        char randAnswer;
-        String possibleAnswers = "ABCD";
+        
         question.createMCQ(questionNumber);
         
-        while (j < numStudents) {
-            for (int y = 0; y < numStudents; y++) {
+        /*For this I used a method similar to the generating random strings for StudentIDS 
+          Uses stringbuilder in order to delete already choosen answers to elimate repeat answers.*/
+            for (int j = 0; j < numStudents; j++) {
+                StringBuffer randomAnswer = new StringBuffer(5);
                 Student testStudent = new Student();
-
-                randAnswer = possibleAnswers.charAt(rand.nextInt(possibleAnswers.length()));
-                testStudent.setStudentAnswer(randAnswer);
-                vote.submitSCQ(testStudent);
+                String possibleAnswers = "ABCD";
+                numChoicePicked = rand.nextInt(3) + 1;
+                StringBuilder answers = new StringBuilder(possibleAnswers);
+                for (int y = 0; y < numChoicePicked; y++) {
+                    
+                    int randomIndex = rand.nextInt(answers.length());
+                    char randomChar = answers.charAt(randomIndex);
+                    randomAnswer.append(randomChar);
+                    answers.deleteCharAt(randomIndex);
+                }
+                System.out.println(randomAnswer.toString());
+                testStudent.setStudentAnswer(randomAnswer.toString());
+                vote.submitMCQ(testStudent,numChoicePicked);
             }   
-        j++;
-        }
+        
 
         vote.results(question);
         MCQ = false;
@@ -89,7 +109,7 @@ public class SimulationDriver {
     }
     
 
-}
+ }
 
 
 }

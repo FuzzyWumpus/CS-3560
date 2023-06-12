@@ -21,11 +21,11 @@ public class VotingService {
 
     }
 
-    //Keeps track of how many times each choice was chosen
+    //Keeps track of how many times each choice was chosen for SCQ
     public void submitSCQ(Student student){
         
-        char answer = student.getStudentAnswer();
-        System.out.println("Student picked: " + answer);
+        char answer = (student.getStudentAnswer()).charAt(0);
+        
         if (answer == 'A') {
             Anum++;
         } 
@@ -41,8 +41,11 @@ public class VotingService {
         
     }  
 
+     //Keeps track of how many times each choice was chosen for SCQ true or false
+        public void submitTF(Student student){
 
-        public void submitTF(char answer){
+            char answer = (student.getStudentAnswer()).charAt(0);
+            
             if (answer == 'T') {
                 Tnum++;
             }
@@ -51,8 +54,30 @@ public class VotingService {
             }
         }
     
+         //Keeps track of how many times each choice was chosen for MCQ
+         public void submitMCQ(Student student, int numChoices){
+            
+            for (int i = 0; i < numChoices; i++){
+            char answer = (student.getStudentAnswer()).charAt(i);
+            System.out.println("choice: " + answer);
+
+            if (answer == 'A') {
+                Anum++;
+            } 
+            else if(answer == 'B') {
+                Bnum++;
+            }
+            else if (answer == 'C') {
+                Cnum++;
+            }
+            else if (answer == 'D') {
+                Dnum++;
+            }
+         }
+        }  
 
     public void results(Question Q) {
+        //Tracks the questionFormat between A-D answer questions and true or false questions so it correctly outputs statistics
         if (questionFormat == 0)
         System.out.println("Stats from this round\nA : " + Anum + "\nB : " + Bnum + "\nC : " + Cnum + "\nD : " + Dnum);
         else {

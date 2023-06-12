@@ -3,10 +3,10 @@ import java.util.Random;
 public class Student {
     
 private String StudentID;
-private char answer;
+private String answer;
 
 
-//Randomly generates a alphanumeric string of length 5 to get a unique ID for each student.
+//Randomly generates a alphanumeric string of length 5 to get a unique ID for each student using the random class.
 public Student() {
     String alphanumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuv";
  
@@ -28,11 +28,11 @@ public String getStudentID() {
 
 }
 
-public char getStudentAnswer() {
+public String getStudentAnswer() {
     return this.answer;
 }
 
-public void setStudentAnswer(char A) {
+public void setStudentAnswer(String A) {
     answer = A;
 }
 
